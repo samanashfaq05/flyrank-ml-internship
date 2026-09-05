@@ -1,0 +1,696 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Content Decline Recovery Prioritization | FlyRank ML Capstone</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f6f7fb;
+            color: #1f2937;
+            line-height: 1.7;
+        }
+
+        /* HERO */
+        .hero {
+            background: linear-gradient(135deg, #111827, #4c1d3d);
+            color: white;
+            padding: 80px 20px 70px;
+        }
+
+        .hero-content {
+            max-width: 1050px;
+            margin: auto;
+        }
+
+        .tag {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            padding: 7px 16px;
+            border-radius: 30px;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 48px;
+            line-height: 1.15;
+            margin: 10px 0 20px;
+            max-width: 900px;
+        }
+
+        .subtitle {
+            font-size: 20px;
+            color: #e5e7eb;
+            max-width: 800px;
+        }
+
+        .author {
+            margin-top: 25px;
+            color: #d1d5db;
+        }
+
+        /* NAV */
+        nav {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav .nav-content {
+            max-width: 1100px;
+            margin: auto;
+            padding: 14px 20px;
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #4c1d3d;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        /* MAIN */
+        .container {
+            max-width: 1050px;
+            margin: auto;
+            padding: 50px 20px;
+        }
+
+        section {
+            background: white;
+            margin-bottom: 30px;
+            padding: 35px;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        h2 {
+            color: #4c1d3d;
+            margin-top: 0;
+            font-size: 28px;
+        }
+
+        h3 {
+            color: #374151;
+        }
+
+        /* METRICS */
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 18px;
+            margin: 25px 0;
+        }
+
+        .metric-card {
+            background: #f9fafb;
+            padding: 22px;
+            border-radius: 12px;
+            border-left: 5px solid #7c2d5d;
+        }
+
+        .metric-number {
+            font-size: 30px;
+            font-weight: bold;
+            color: #4c1d3d;
+        }
+
+        .metric-label {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        /* TABLE */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th {
+            background: #4c1d3d;
+            color: white;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 13px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        tr:hover {
+            background: #faf5f8;
+        }
+
+        /* IMAGE */
+        .chart {
+            width: 100%;
+            margin-top: 20px;
+            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .chart-caption {
+            color: #6b7280;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        /* HIGHLIGHT */
+        .highlight {
+            background: #fdf2f8;
+            border-left: 5px solid #7c2d5d;
+            padding: 18px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        ul {
+            padding-left: 22px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6b7280;
+        }
+
+        .footer a {
+            color: #4c1d3d;
+            font-weight: bold;
+        }
+
+        @media (max-width: 700px) {
+            h1 {
+                font-size: 34px;
+            }
+
+            section {
+                padding: 25px;
+            }
+
+            table {
+                font-size: 13px;
+            }
+
+            th, td {
+                padding: 9px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- HERO -->
+<header class="hero">
+    <div class="hero-content">
+        <div class="tag">FlyRank ML Internship Capstone</div>
+
+        <h1>
+            Prioritizing Content Records for Decline Recovery Using Machine Learning
+        </h1>
+
+        <p class="subtitle">
+            A decision-support system for identifying content records with a high
+            risk of severe performance decline and prioritizing them for editorial review.
+        </p>
+
+        <p class="author">
+            <strong>Author:</strong> Saman Ashfaq |
+            BS Artificial Intelligence, NUTECH |
+            2026
+        </p>
+    </div>
+</header>
+
+
+<!-- NAVIGATION -->
+<nav>
+    <div class="nav-content">
+        <a href="#abstract">Abstract</a>
+        <a href="#problem">Problem</a>
+        <a href="#data">Data</a>
+        <a href="#method">Method</a>
+        <a href="#results">Results</a>
+        <a href="#interpretation">Interpretation</a>
+        <a href="#recommendations">Recommendations</a>
+        <a href="#limitations">Limitations</a>
+    </div>
+</nav>
+
+
+<main class="container">
+
+<!-- ABSTRACT -->
+<section id="abstract">
+
+    <h2>Abstract</h2>
+
+    <p>
+        This project investigates whether observable search performance, traffic,
+        engagement, and content characteristics can help prioritize content records
+        that are likely to experience severe decline. The analysis uses 56,253
+        content records from the FlyRank ML Internship dataset and defines severe
+        decline as a reduction of at least 60% in recent impressions compared with
+        the previous 30-day period. A client-level grouped train/test split was used
+        to reduce overlap between clients during evaluation, and a Random Forest
+        classifier was compared with a transparent rule-based baseline. On the same
+        test split, the Random Forest achieved Precision@50 of 1.00 compared with
+        0.72 for the baseline. The resulting output is intended as a decision-support
+        tool that ranks content records for human editorial investigation rather than
+        automatically prescribing content changes.
+    </p>
+
+</section>
+
+
+<!-- PROBLEM -->
+<section id="problem">
+
+    <h2>1. Problem Framing</h2>
+
+    <p>
+        Content teams often manage many pages simultaneously, making it difficult to
+        determine which records should receive editorial attention first. This project
+        supports the decision of prioritizing content records for possible refresh or
+        recovery investigation.
+    </p>
+
+    <div class="metrics">
+
+        <div class="metric-card">
+            <div class="metric-number">Content Record</div>
+            <div class="metric-label">Unit of analysis</div>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-number">Risk Score</div>
+            <div class="metric-label">Model output</div>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-number">Ranked List</div>
+            <div class="metric-label">Editorial decision support</div>
+        </div>
+
+    </div>
+
+    <p>
+        A false positive may cause unnecessary editorial review, while a false negative
+        may cause a genuinely declining record to be missed. Machine learning can help
+        organize many observable signals into a prioritized ranking, allowing human
+        editors to investigate the highest-risk records first.
+    </p>
+
+</section>
+
+
+<!-- DATA -->
+<section id="data">
+
+    <h2>2. Data</h2>
+
+    <div class="metrics">
+
+        <div class="metric-card">
+            <div class="metric-number">56,253</div>
+            <div class="metric-label">Content records</div>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-number">46</div>
+            <div class="metric-label">Clients</div>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-number">43</div>
+            <div class="metric-label">Original columns</div>
+        </div>
+
+    </div>
+
+    <p>
+        The dataset contains observable content, search, traffic, engagement, and
+        performance characteristics. Pseudonymous identifier columns were used for
+        grouping purposes only and were not included as predictive features.
+    </p>
+
+    <h3>Target Definition</h3>
+
+    <div class="highlight">
+        <strong>Severe Decline:</strong>
+        Impression change of <strong>−60% or lower</strong> between the recent
+        30-day period and the previous 30-day period.
+    </div>
+
+    <p>
+        The resulting target distribution contained 26,093 severe decline records
+        and 30,160 non-severe decline records.
+    </p>
+
+    <img src="severe_decline_distribution.png"
+         class="chart"
+         alt="Severe decline distribution chart">
+
+    <p class="chart-caption">
+        Figure 1. Distribution of severe and non-severe decline records.
+    </p>
+
+</section>
+
+
+<!-- METHOD -->
+<section id="method">
+
+    <h2>3. Methodology</h2>
+
+    <h3>Feature Selection</h3>
+
+    <p>
+        Features included observable characteristics such as keyword and title
+        properties, historical impressions and clicks, traffic signals, content age,
+        click-through rate, average position, and engagement-related measures.
+    </p>
+
+    <p>
+        Identifier columns were excluded from the feature set. Label-derived fields
+        such as <code>trend_direction</code> and <code>trend_pct</code> were also
+        excluded to reduce target leakage.
+    </p>
+
+    <h3>Validation Design</h3>
+
+    <p>
+        A grouped train/test split was performed at the client level so that clients
+        appearing in the training set did not also appear in the test set.
+    </p>
+
+    <div class="metrics">
+
+        <div class="metric-card">
+            <div class="metric-number">48,219</div>
+            <div class="metric-label">Training records</div>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-number">8,034</div>
+            <div class="metric-label">Test records</div>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-number">36 / 10</div>
+            <div class="metric-label">Train / Test clients</div>
+        </div>
+
+    </div>
+
+    <h3>Models</h3>
+
+    <ul>
+        <li>Transparent rule-based baseline</li>
+        <li>Random Forest Classifier</li>
+    </ul>
+
+    <p>
+        Both approaches were evaluated on the same held-out client-level test split
+        using Precision@50 as the primary ranking metric.
+    </p>
+
+</section>
+
+
+<!-- RESULTS -->
+<section id="results">
+
+    <h2>4. Results</h2>
+
+    <p>
+        The Random Forest model was compared directly with the transparent baseline
+        using the same evaluation split.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Method</th>
+                <th>Precision@50</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>Test Base Rate</td>
+                <td>0.524</td>
+            </tr>
+
+            <tr>
+                <td>Transparent Baseline</td>
+                <td>0.720</td>
+            </tr>
+
+            <tr>
+                <td><strong>Random Forest</strong></td>
+                <td><strong>1.000</strong></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="highlight">
+        <strong>Observed lift over baseline:</strong> 0.28 Precision@50.
+    </div>
+
+    <img src="model_vs_baseline.png"
+         class="chart"
+         alt="Model versus baseline comparison">
+
+    <p class="chart-caption">
+        Figure 2. Precision@50 comparison between the test base rate,
+        transparent baseline, and Random Forest model.
+    </p>
+
+</section>
+
+
+<!-- INTERPRETATION -->
+<section id="interpretation">
+
+    <h2>5. Interpretation</h2>
+
+    <p>
+        Feature importance analysis indicates that historical search visibility,
+        position-related signals, content age, and recent click activity were among
+        the most influential features used by the Random Forest model.
+    </p>
+
+    <img src="top_feature_importances.png"
+         class="chart"
+         alt="Top feature importances">
+
+    <p class="chart-caption">
+        Figure 3. Top features by Random Forest importance.
+    </p>
+
+    <h3>Top Observed Features</h3>
+
+    <ul>
+        <li>Impressions over the previous 90 days</li>
+        <li>Search position-related signals</li>
+        <li>Content age</li>
+        <li>Average search position</li>
+        <li>Recent click activity</li>
+        <li>URL and content title characteristics</li>
+        <li>Click-through rate</li>
+    </ul>
+
+    <p>
+        Feature importance reflects how the model used variables for prediction and
+        should not be interpreted as evidence that any individual feature causes
+        content decline.
+    </p>
+
+</section>
+
+
+<!-- RECOMMENDATIONS -->
+<section id="recommendations">
+
+    <h2>6. Ranked Recommendations</h2>
+
+    <p>
+        The final model output is converted into a ranked action list for editorial
+        decision-support. Records with the highest predicted probability of severe
+        decline are prioritized for review.
+    </p>
+
+    <h3>Priority Framework</h3>
+
+    <ul>
+        <li><strong>High priority:</strong> probability ≥ 0.80</li>
+        <li><strong>Medium priority:</strong> probability ≥ 0.60 and &lt; 0.80</li>
+        <li><strong>Low priority:</strong> probability &lt; 0.60</li>
+    </ul>
+
+    <div class="highlight">
+        <strong>Recommended action:</strong>
+        High-priority records should be reviewed by an editor for possible content
+        refresh or recovery action.
+    </div>
+
+    <img src="top10_ranked_recommendations.png"
+         class="chart"
+         alt="Top ranked recommendations">
+
+    <p class="chart-caption">
+        Figure 4. Top 10 ranked recommendations generated by the model.
+    </p>
+
+    <p>
+        These recommendations are not automatic instructions to change content.
+        A human editor should review the underlying content and performance context
+        before deciding on any intervention.
+    </p>
+
+</section>
+
+
+<!-- LIMITATIONS -->
+<section id="limitations">
+
+    <h2>7. Limitations & Honest Framing</h2>
+
+    <ul>
+        <li>
+            The severe decline target is an operational proxy based on impression
+            change and does not capture every possible form of content underperformance.
+        </li>
+
+        <li>
+            Model performance was measured on one client-level grouped split and may
+            vary on future datasets or different content populations.
+        </li>
+
+        <li>
+            The model identifies patterns associated with the defined target but does
+            not establish causal reasons for performance decline.
+        </li>
+
+        <li>
+            Feature importance should not be interpreted as causal impact.
+        </li>
+
+        <li>
+            A high predicted probability does not guarantee that a particular content
+            intervention will improve performance.
+        </li>
+
+        <li>
+            Recommendations should remain subject to human editorial judgment.
+        </li>
+    </ul>
+
+</section>
+
+
+<!-- REPRODUCIBILITY -->
+<section id="reproducibility">
+
+    <h2>8. Reproducibility</h2>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Dataset</th>
+                <td>FlyRank ML Internship Dataset</td>
+            </tr>
+
+            <tr>
+                <th>Lane</th>
+                <td>Decline Recovery</td>
+            </tr>
+
+            <tr>
+                <th>Model</th>
+                <td>Random Forest Classifier</td>
+            </tr>
+
+            <tr>
+                <th>Validation</th>
+                <td>Client-level grouped train/test split</td>
+            </tr>
+
+            <tr>
+                <th>Test Size</th>
+                <td>20%</td>
+            </tr>
+
+            <tr>
+                <th>Primary Metric</th>
+                <td>Precision@50</td>
+            </tr>
+
+            <tr>
+                <th>Random Seed</th>
+                <td>42</td>
+            </tr>
+        </tbody>
+    </table>
+
+</section>
+
+
+<!-- ACKNOWLEDGMENTS -->
+<section id="acknowledgments">
+
+    <h2>9. Acknowledgments & Data Credit</h2>
+
+    <p>
+        Built on the
+        <a href="https://flyrank.ai" target="_blank">FlyRank ML Internship dataset</a>.
+    </p>
+
+    <p>
+        This project was developed as part of the FlyRank ML Internship capstone.
+        The analysis uses public-safe aggregated and pseudonymous data and does not
+        expose client-identifying information.
+    </p>
+
+</section>
+
+</main>
+
+
+<footer class="footer">
+
+    <p>
+        © 2026 Saman Ashfaq · FlyRank ML Internship Capstone
+    </p>
+
+    <p>
+        Built on the
+        <a href="https://flyrank.ai" target="_blank">FlyRank ML Internship dataset</a>
+    </p>
+
+</footer>
+
+</body>
+</html>
